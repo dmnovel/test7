@@ -2087,7 +2087,21 @@ html[data-theme="dark"] .keyword-chip.exclude{background:#2A2A2F!important}
 }
 </style>
 
-</head><body><script id="event-tab-restore-prep-script">
+</head><body><script id="event-recent-search-storage-key-script">
+(function(){
+  const MASTER_KEY='dm_recent_searches';
+  const EVENT_KEY='dm_event_recent_searches';
+  const storage=window.localStorage;
+  if(!storage||storage.__dmEventRecentSearchPatched)return;
+  const get=storage.getItem.bind(storage);
+  const set=storage.setItem.bind(storage);
+  const remove=storage.removeItem.bind(storage);
+  storage.getItem=function(key){return get(key===MASTER_KEY?EVENT_KEY:key)};
+  storage.setItem=function(key,value){return set(key===MASTER_KEY?EVENT_KEY:key,value)};
+  storage.removeItem=function(key){return remove(key===MASTER_KEY?EVENT_KEY:key)};
+  try{Object.defineProperty(storage,'__dmEventRecentSearchPatched',{value:true})}catch{}
+})();
+</script><script id="event-tab-restore-prep-script">
 (function(){
   try{
     const tab=sessionStorage.getItem('dm_event_active_tab');
